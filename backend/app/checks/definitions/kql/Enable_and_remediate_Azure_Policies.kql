@@ -1,0 +1,10 @@
+// Query to check Azure Policy compliance for AKS
+policyresources
+| where type =~ "microsoft.policyinsights/policystates"
+| where properties.resourceType =~ "Microsoft.ContainerService/managedClusters"
+| where properties.complianceState =~ "NonCompliant"
+| summarize nonCompliantCount = count() by 
+    name = tostring(properties.resourceId),
+    resourceGroup = tostring(properties.resourceGroup),
+    subscriptionId = tostring(properties.subscriptionId)
+| where nonCompliantCount > 0

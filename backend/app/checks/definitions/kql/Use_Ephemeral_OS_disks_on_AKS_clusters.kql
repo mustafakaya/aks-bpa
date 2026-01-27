@@ -1,0 +1,7 @@
+// Query to check if node pools use ephemeral OS disks
+resources
+| where type =~ "microsoft.containerservice/managedclusters"
+| extend agentPoolProfiles = properties.agentPoolProfiles
+| mv-expand agentPoolProfiles
+| where agentPoolProfiles.osDiskType !~ "Ephemeral"
+| project name, resourceGroup, subscriptionId, poolName = agentPoolProfiles.name, osDiskType = agentPoolProfiles.osDiskType

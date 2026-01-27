@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=false
+      - DATABASE_URL=sqlite+aiosqlite:///./data/aks_bpa.db
+      # Azure credentials - uncomment and set these, or use DefaultAzureCredential
+      # - AZURE_TENANT_ID=${AZURE_TENANT_ID}
+      # - AZURE_CLIENT_ID=${AZURE_CLIENT_ID}
+      # - AZURE_CLIENT_SECRET=${AZURE_CLIENT_SECRET}
+    volumes:
+      - aks-bpa-data:/app/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  aks-bpa-data:

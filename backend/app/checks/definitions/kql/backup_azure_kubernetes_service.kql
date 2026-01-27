@@ -1,0 +1,13 @@
+// Query to check if AKS cluster has backup configured
+resources
+| where type =~ "microsoft.containerservice/managedclusters"
+| join kind=leftouter (
+    resources
+    | where type =~ "microsoft.dataprotection/backupvaults/backupinstances"
+    | extend datasourceType = properties.dataSourceInfo.datasourceType
+    | where datasourceType =~ "Microsoft.ContainerService/managedClusters"
+    | extend aksId = tolower(tostring(properties.dataSourceInfo.resourceID))
+    | project aksId
+) on $left.id == $right.aksId
+| where isempty(aksId)
+| project name, resourceGroup, subscriptionId

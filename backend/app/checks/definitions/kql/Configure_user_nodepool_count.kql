@@ -1,0 +1,8 @@
+// Query to check if user node pools have adequate nodes
+resources
+| where type =~ "microsoft.containerservice/managedclusters"
+| extend agentPoolProfiles = properties.agentPoolProfiles
+| mv-expand agentPoolProfiles
+| where agentPoolProfiles.mode =~ "User"
+| where toint(agentPoolProfiles.['count']) < 2
+| project name, resourceGroup, subscriptionId, poolName = agentPoolProfiles.name, nodeCount = agentPoolProfiles.['count']

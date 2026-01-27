@@ -1,0 +1,11 @@
+// Query to check if system and user pods are isolated using dedicated node pools
+resources
+| where type =~ "microsoft.containerservice/managedclusters"
+| extend agentPoolProfiles = properties.agentPoolProfiles
+| mv-expand agentPoolProfiles
+| summarize 
+    systemPools = countif(agentPoolProfiles.mode =~ "System"),
+    userPools = countif(agentPoolProfiles.mode =~ "User")
+    by name, resourceGroup, subscriptionId
+| where systemPools < 1 or userPools < 1
+| project name, resourceGroup, subscriptionId, systemPools, userPools

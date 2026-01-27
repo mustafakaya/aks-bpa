@@ -1,0 +1,7 @@
+// Query to check if node pools have availability zones enabled
+resources
+| where type =~ "microsoft.containerservice/managedclusters"
+| extend agentPoolProfiles = properties.agentPoolProfiles
+| mv-expand agentPoolProfiles
+| where agentPoolProfiles.availabilityZones == dynamic([]) or isnull(agentPoolProfiles.availabilityZones)
+| project name, resourceGroup, subscriptionId, poolName = agentPoolProfiles.name

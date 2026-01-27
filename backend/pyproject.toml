@@ -1,0 +1,60 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aks-bpa"
+version = "2.0.0"
+description = "AKS Best Practices Assessment - A standalone tool for evaluating Azure Kubernetes Service clusters against Azure Well-Architected Framework"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+authors = [
+    {name = "Mustafa Kaya"}
+]
+keywords = ["azure", "aks", "kubernetes", "best-practices", "assessment", "well-architected"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: System :: Systems Administration",
+]
+dependencies = [
+    "fastapi>=0.109.0",
+    "uvicorn[standard]>=0.27.0",
+    "azure-identity>=1.15.0",
+    "azure-mgmt-containerservice>=28.0.0",
+    "azure-mgmt-resourcegraph>=8.0.0",
+    "azure-mgmt-resource>=23.0.1",
+    "azure-mgmt-subscription>=3.1.1",
+    "sqlalchemy>=2.0.25",
+    "aiosqlite>=0.19.0",
+    "pydantic>=2.5.3",
+    "pydantic-settings>=2.1.0",
+    "python-jose[cryptography]>=3.3.0",
+    "httpx>=0.26.0",
+    "tabulate>=0.9.0",
+    "python-dotenv>=1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.23.0",
+    "black>=24.1.0",
+    "ruff>=0.1.0",
+]
+
+[tool.black]
+line-length = 100
+target-version = ["py310", "py311", "py312"]
+
+[tool.ruff]
+line-length = 100
+select = ["E", "F", "I", "W"]

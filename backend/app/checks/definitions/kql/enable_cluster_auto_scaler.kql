@@ -1,0 +1,7 @@
+// Query to check if cluster autoscaler is enabled on node pools
+resources
+| where type =~ "microsoft.containerservice/managedclusters"
+| extend agentPoolProfiles = properties.agentPoolProfiles
+| mv-expand agentPoolProfiles
+| where agentPoolProfiles.enableAutoScaling != true
+| project name, resourceGroup, subscriptionId, poolName = agentPoolProfiles.name, autoScalingEnabled = agentPoolProfiles.enableAutoScaling

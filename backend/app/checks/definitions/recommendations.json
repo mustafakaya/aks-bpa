@@ -1,0 +1,314 @@
+[
+  {
+    "id": "rel-001",
+    "category": "Reliability",
+    "recommendation_name": "Update AKS tier to Standard or Premium",
+    "description": "Using Standard or Premium tier ensures financially backed SLA and better reliability features.",
+    "object_key": "sku.tier",
+    "object.value": "Standard|Premium",
+    "remediation": "Update your AKS cluster SKU tier to Standard or Premium for production workloads.",
+    "learn_more_link": "https://learn.microsoft.com/en-us/azure/aks/free-standard-pricing-tiers"
+  },
+  {
+    "id": "rel-002",
+    "category": "Reliability",
+    "recommendation_name": "Deploy AKS cluster across availability zones",
+    "description": "Distributing nodes across availability zones improves resilience against datacenter failures.",
+    "query_file": "node_pool_check.kql",
+    "remediation": "Create node pools with availability zones enabled.",
+    "learn_more_link": "https://learn.microsoft.com/en-us/azure/aks/availability-zones"
+  },
+  {
+    "id": "rel-003",
+    "category": "Reliability",
+    "recommendation_name": "Isolate system and application pods",
+    "description": "Use separate node pools for system and user workloads to ensure critical system pods have dedicated resources.",
+    "query_file": "isolate_system_pods.kql",
+    "remediation": "Create dedicated system node pools with mode 'System' and user node pools with mode 'User'.",
+    "learn_more_link": "https://learn.microsoft.com/en-us/azure/aks/use-system-pools"
+  },
+  {
+    "id": "rel-004",
+    "category": "Reliability",
+    "recommendation_name": "Configure Azure CNI networking",
+    "description": "Azure CNI provides better networking performance and integration with Azure networking features.",
+    "object_key": "networkProfile.networkPlugin",
+    "object.value": "azure",
+    "remediation": "Use Azure CNI for production clusters requiring advanced networking features.",
+    "learn_more_link": "https://learn.microsoft.com/en-us/azure/aks/concepts-network"
+  },
+  {
+    "id": "rel-005",
+    "category": "Reliability",
+    "recommendation_name": "Enable the cluster auto-scaler",
+    "description": "Cluster autoscaler automatically adjusts node count based on workload demands.",
+    "query_file": "enable_cluster_auto_scaler.kql",
+    "remediation": "Enable cluster autoscaler on your node pools.",
+    "learn_more_link": "https://learn.microsoft.com/en-us/azure/aks/cluster-autoscaler"
+  },
+  {
+    "id": "rel-006",
+    "category": "Reliability",
+    "recommendation_name": "Back up Azure Kubernetes Service",
+    "description": "Regular backups protect against data loss and enable disaster recovery.",
+    "query_file": "backup_azure_kubernetes_service.kql",
+    "remediation": "Configure Azure Backup for AKS to protect your cluster and persistent volumes.",
+    "learn_more_link": "https://learn.microsoft.com/en-us/azure/backup/azure-kubernetes-service-backup-overview"
+  },
+  {
+    "id": "rel-007",
+    "category": "Reliability",
+    "recommendation_name": "Use Ephemeral OS disks on AKS clusters",
+    "description": "Ephemeral OS disks provide better performance and lower latency for stateless workloads.",
+    "query_file": "Use_Ephemeral_OS_disks_on_AKS_clusters.kql",
+    "remediation": "Configure node pools to use ephemeral OS disks.",
+    "learn_more_link": "https://learn.microsoft.com/en-us/azure/aks/cluster-configuration#ephemeral-os"
+  },
+  {
+    "id": "rel-008",
+    "category": "Reliability",
+    "recommendation_name": "Use NAT gateway for clusters with many concurrent outbound connections",
+    "description": "NAT gateway provides better outbound connectivity for clusters with high connection counts.",
+    "object_key": "CouldNotValidated",
+    "object.value": "azure",
+    "remediation": "Configure NAT gateway for clusters making many outbound connections.",
+    "learn_more_link": "https://learn.microsoft.com/en-us/azure/aks/nat-gateway"
+  },
+  {
+    "id": "rel-009",
+    "category": "Reliability",
+    "recommendation_name": "Configure system nodepool count",
+    "description": "System node pools should have at least 2 nodes for high availability.",
+    "query_file": "Configure_system_nodepool_count.kql",
+    "remediation": "Ensure system node pools have a minimum of 2 nodes.",
+    "learn_more_link": "https://learn.microsoft.com/en-us/azure/aks/use-system-pools"
+  },
+  {
+    "id": "rel-010",
+    "category": "Reliability",
+    "recommendation_name": "Configure user nodepool count",
+    "description": "User node pools should have adequate nodes for workload distribution.",
+    "query_file": "Configure_user_nodepool_count.kql",
+    "remediation": "Configure appropriate node counts for user workloads.",
+    "learn_more_link": "https://learn.microsoft.com/en-us/azure/aks/use-multiple-node-pools"
+  },
+  {
+    "id": "sec-001",
+    "category": "Security",
+    "recommendation_name": "Use managed identities on cluster",
+    "description": "Managed identities eliminate the need for managing credentials and improve security.",
+    "object_key": "identity.type",
+    "object.value": "SystemAssigned|UserAssigned",
+    "remediation": "Enable managed identity for your AKS cluster.",
+    "learn_more_link": "https://learn.microsoft.com/en-us/azure/aks/use-managed-identity"
+  },
+  {
+    "id": "sec-002",
+    "category": "Security",
+    "recommendation_name": "Use Microsoft Entra Workload ID",
+    "description": "Workload Identity enables pods to access Azure resources using Azure AD identities.",
+    "object_key": "securityProfile.workloadIdentity.enabled",
+    "object.value": "true",
+    "remediation": "Enable Microsoft Entra Workload ID for your cluster.",
+    "learn_more_link": "https://learn.microsoft.com/en-us/azure/aks/workload-identity-overview"
+  },
+  {
+    "id": "sec-003",
+    "category": "Security",
+    "recommendation_name": "Use private AKS cluster",
+    "description": "Private clusters restrict API server access to private networks only.",
+    "object_key": "apiServerAccessProfile.enablePrivateCluster",
+    "object.value": "true",
+    "remediation": "Enable private cluster to secure API server access.",
+    "learn_more_link": "https://learn.microsoft.com/en-us/azure/aks/private-clusters"
+  },
+  {
+    "id": "sec-004",
+    "category": "Security",
+    "recommendation_name": "Use Microsoft Defender for Cloud for AKS",
+    "description": "Microsoft Defender provides threat detection and security recommendations.",
+    "object_key": "securityProfile.defender.securityMonitoring.enabled",
+    "object.value": "true",
+    "remediation": "Enable Microsoft Defender for Containers.",
+    "learn_more_link": "https://learn.microsoft.com/en-us/azure/defender-for-cloud/defender-for-containers-introduction"
+  },
+  {
+    "id": "sec-005",
+    "category": "Security",
+    "recommendation_name": "Use Microsoft Entra ID RBAC for AKS cluster access control",
+    "description": "Azure AD integration provides enterprise-grade identity management.",
+    "object_key": "aadProfile.managed",
+    "object.value": "true",
+    "remediation": "Enable Azure AD managed integration for your cluster.",
+    "learn_more_link": "https://learn.microsoft.com/en-us/azure/aks/managed-azure-ad"
+  },
+  {
+    "id": "sec-006",
+    "category": "Security",
+    "recommendation_name": "Enable Azure RBAC for Kubernetes Authorization",
+    "description": "Azure RBAC for Kubernetes allows unified access management across Azure and Kubernetes.",
+    "object_key": "aadProfile.enableAzureRbac",
+    "object.value": "true",
+    "remediation": "Enable Azure RBAC for Kubernetes Authorization.",
+    "learn_more_link": "https://learn.microsoft.com/en-us/azure/aks/manage-azure-rbac"
+  },
+  {
+    "id": "sec-007",
+    "category": "Security",
+    "recommendation_name": "Disable local accounts on the cluster",
+    "description": "Disabling local accounts enforces Azure AD authentication for all access.",
+    "object_key": "disableLocalAccounts",
+    "object.value": "true",
+    "remediation": "Disable local accounts to enforce Azure AD authentication.",
+    "learn_more_link": "https://learn.microsoft.com/en-us/azure/aks/managed-azure-ad#disable-local-accounts"
+  },
+  {
+    "id": "sec-008",
+    "category": "Security",
+    "recommendation_name": "Use the Secrets Store CSI Driver with Key Vault",
+    "description": "Secrets Store CSI Driver securely mounts secrets from Azure Key Vault.",
+    "object_key": "addonProfiles.azureKeyvaultSecretsProvider.enabled",
+    "object.value": "true",
+    "remediation": "Enable the Azure Key Vault Secrets Provider addon.",
+    "learn_more_link": "https://learn.microsoft.com/en-us/azure/aks/csi-secrets-store-driver"
+  },
+  {
+    "id": "sec-009",
+    "category": "Security",
+    "recommendation_name": "Use Azure network policies",
+    "description": "Network policies control traffic flow between pods for enhanced security.",
+    "object_key": "networkProfile.networkPolicy",
+    "object.value": "azure|calico|cilium",
+    "remediation": "Enable network policies for your cluster.",
+    "learn_more_link": "https://learn.microsoft.com/en-us/azure/aks/use-network-policies"
+  },
+  {
+    "id": "sec-010",
+    "category": "Security",
+    "recommendation_name": "Enable image cleaner",
+    "description": "Image cleaner removes stale and unused images to reduce security risks.",
+    "object_key": "securityProfile.imageCleaner.enabled",
+    "object.value": "true",
+    "remediation": "Enable image cleaner to automatically remove unused images.",
+    "learn_more_link": "https://learn.microsoft.com/en-us/azure/aks/image-cleaner"
+  },
+  {
+    "id": "cost-001",
+    "category": "Cost Optimization",
+    "recommendation_name": "Choose the right VM instance types for your AKS node pools",
+    "description": "Selecting appropriate VM sizes optimizes cost and performance.",
+    "object_key": "CouldNotValidated",
+    "object.value": "azure",
+    "remediation": "Review and optimize VM sizes based on workload requirements.",
+    "learn_more_link": "https://learn.microsoft.com/en-us/azure/aks/quotas-skus-regions"
+  },
+  {
+    "id": "cost-002",
+    "category": "Cost Optimization",
+    "recommendation_name": "Use Spot VMs for non-production workloads",
+    "description": "Spot VMs provide significant cost savings for interruptible workloads.",
+    "object_key": "CouldNotValidated",
+    "object.value": "azure",
+    "remediation": "Create spot node pools for fault-tolerant workloads.",
+    "learn_more_link": "https://learn.microsoft.com/en-us/azure/aks/spot-node-pool"
+  },
+  {
+    "id": "cost-003",
+    "category": "Cost Optimization",
+    "recommendation_name": "Consider ARM64-based VMs for better price-to-performance",
+    "description": "ARM64 VMs can provide better price-to-performance for compatible workloads.",
+    "object_key": "CouldNotValidated",
+    "object.value": "azure",
+    "remediation": "Evaluate ARM64-based VMs for cost-effective computing.",
+    "learn_more_link": "https://learn.microsoft.com/en-us/azure/aks/use-multiple-node-pools#add-an-arm64-node-pool"
+  },
+  {
+    "id": "cost-004",
+    "category": "Cost Optimization",
+    "recommendation_name": "Use the AKS cost analysis add-on",
+    "description": "Cost analysis provides visibility into cluster spending.",
+    "object_key": "metricsProfile.costAnalysis.enabled",
+    "object.value": "true",
+    "remediation": "Enable the cost analysis addon for spending visibility.",
+    "learn_more_link": "https://learn.microsoft.com/en-us/azure/aks/cost-analysis"
+  },
+  {
+    "id": "ops-001",
+    "category": "Operational Excellence",
+    "recommendation_name": "Use Kubernetes Event Driven Autoscaler (KEDA)",
+    "description": "KEDA enables event-driven autoscaling for efficient resource utilization.",
+    "object_key": "workloadAutoScalerProfile.keda.enabled",
+    "object.value": "true",
+    "remediation": "Enable KEDA for event-driven autoscaling.",
+    "learn_more_link": "https://learn.microsoft.com/en-us/azure/aks/keda-about"
+  },
+  {
+    "id": "ops-002",
+    "category": "Operational Excellence",
+    "recommendation_name": "Enable AKS Monitoring",
+    "description": "Azure Monitor provides comprehensive cluster monitoring and insights.",
+    "object_key": "addonProfiles.omsagent.enabled",
+    "object.value": "true",
+    "remediation": "Enable Container Insights for your cluster.",
+    "learn_more_link": "https://learn.microsoft.com/en-us/azure/azure-monitor/containers/container-insights-overview"
+  },
+  {
+    "id": "ops-003",
+    "category": "Operational Excellence",
+    "recommendation_name": "Use Azure Policy for AKS",
+    "description": "Azure Policy enforces organizational standards and assesses compliance.",
+    "object_key": "addonProfiles.azurepolicy.enabled",
+    "object.value": "true",
+    "remediation": "Enable Azure Policy addon for governance.",
+    "learn_more_link": "https://learn.microsoft.com/en-us/azure/governance/policy/concepts/policy-for-kubernetes"
+  },
+  {
+    "id": "ops-004",
+    "category": "Operational Excellence",
+    "recommendation_name": "Enable and remediate Azure Policies configured for AKS",
+    "description": "Ensure Azure Policies are actively enforced and violations are remediated.",
+    "query_file": "Enable_and_remediate_Azure_Policies.kql",
+    "remediation": "Review and remediate Azure Policy compliance issues.",
+    "learn_more_link": "https://learn.microsoft.com/en-us/azure/governance/policy/concepts/policy-for-kubernetes"
+  },
+  {
+    "id": "ops-005",
+    "category": "Operational Excellence",
+    "recommendation_name": "Enable GitOps with Flux",
+    "description": "GitOps enables declarative cluster configuration management.",
+    "object_key": "gitOpsProfile.enabled",
+    "object.value": "true",
+    "remediation": "Enable GitOps using Flux v2 for configuration management.",
+    "learn_more_link": "https://learn.microsoft.com/en-us/azure/azure-arc/kubernetes/conceptual-gitops-flux2"
+  },
+  {
+    "id": "perf-001",
+    "category": "Performance Efficiency",
+    "recommendation_name": "Use the latest Kubernetes version",
+    "description": "Running the latest supported Kubernetes version ensures access to new features and security patches.",
+    "object_key": "kubernetesVersion",
+    "object.value": "1.32.3|1.32.2|1.32.1|1.32.0|1.31.7|1.31.6|1.31.5|1.31.4|1.31.3|1.31.2|1.31.1|1.31.0|1.30.8|1.30.7|1.30.6",
+    "remediation": "Upgrade your cluster to a recent Kubernetes version.",
+    "learn_more_link": "https://learn.microsoft.com/en-us/azure/aks/supported-kubernetes-versions"
+  },
+  {
+    "id": "perf-002",
+    "category": "Performance Efficiency",
+    "recommendation_name": "Use Vertical Pod Autoscaler (VPA)",
+    "description": "VPA automatically adjusts resource requests and limits for pods.",
+    "object_key": "workloadAutoScalerProfile.verticalPodAutoscaler.enabled",
+    "object.value": "true",
+    "remediation": "Enable VPA for automatic resource optimization.",
+    "learn_more_link": "https://learn.microsoft.com/en-us/azure/aks/vertical-pod-autoscaler"
+  },
+  {
+    "id": "perf-003",
+    "category": "Performance Efficiency",
+    "recommendation_name": "Enable node auto-provisioning (Karpenter)",
+    "description": "Node auto-provisioning dynamically provisions optimal nodes for workloads.",
+    "object_key": "nodeProvisioningProfile.mode",
+    "object.value": "Auto",
+    "remediation": "Enable node auto-provisioning for dynamic node management.",
+    "learn_more_link": "https://learn.microsoft.com/en-us/azure/aks/node-autoprovision"
+  }
+]
