@@ -1,0 +1,24 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: aks-bpa
+
+resources:
+  - namespace.yaml
+  - configmap.yaml
+  - backend.yaml
+  - frontend.yaml
+  - ingress.yaml
+
+# Note: Secret should be applied separately or managed via external secrets
+# - secret.yaml
+
+commonLabels:
+  app.kubernetes.io/managed-by: kustomize
+  app.kubernetes.io/version: "2.0.0"
+
+images:
+  - name: ghcr.io/mustafakaya/aks-bpa-backend
+    newTag: latest
+  - name: ghcr.io/mustafakaya/aks-bpa-frontend
+    newTag: latest

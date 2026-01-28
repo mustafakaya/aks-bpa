@@ -51,7 +51,20 @@ aks-bpa/
 │   │   └── types/          # TypeScript definitions
 │   ├── package.json
 │   └── Dockerfile
-├── docker-compose.yml
+├── k8s/                    # Kubernetes manifests for AKS deployment
+│   ├── namespace.yaml      # Namespace definition
+│   ├── configmap.yaml      # Application configuration
+│   ├── secret.yaml.template # Secret template (copy & edit)
+│   ├── backend.yaml        # Backend deployment & service
+│   ├── frontend.yaml       # Frontend deployment & service
+│   ├── ingress.yaml        # Ingress configuration
+│   └── kustomization.yaml  # Kustomize configuration
+├── .github/
+│   └── workflows/
+│       └── docker-build.yml # CI/CD for building images
+├── docker-compose.yml      # Local Docker deployment
+├── deploy-aks.sh           # AKS deployment script (Linux/macOS)
+├── deploy-aks.ps1          # AKS deployment script (Windows)
 └── README.md
 ```
 
@@ -111,6 +124,90 @@ npm run dev
 ```
 
 Open your browser to `http://localhost:3000`
+
+### Option 3: Deploy to AKS (Kubernetes)
+
+Deploy the application to your AKS cluster using the provided Kubernetes manifests.
+
+#### Prerequisites
+
+- An AKS cluster with NGINX Ingress Controller or Azure Application Gateway Ingress Controller
+- `kubectl` configured to connect to your cluster
+- Container images pushed to a registry (or use GitHub Container Registry)
+
+#### Step 1: Create the Secret
+
+```bash
+# Copy the template and edit with your credentials
+cp k8s/secret.yaml.template k8s/secret.yaml
+
+# Edit k8s/secret.yaml with your Azure Service Principal credentials
+```
+
+#### Step 2: Deploy
+
+**Using the deployment script (recommended):**
+
+```bash
+# Linux/macOS
+chmod +x deploy-aks.sh
+./deploy-aks.sh
+
+# Windows PowerShell
+.\deploy-aks.ps1
+```
+
+**Or deploy manually with kubectl:**
+
+```bash
+# Apply all manifests
+kubectl apply -f k8s/namespace.yaml
+kubectl apply -f k8s/configmap.yaml
+kubectl apply -f k8s/secret.yaml
+kubectl apply -f k8s/backend.yaml
+kubectl apply -f k8s/frontend.yaml
+kubectl apply -f k8s/ingress.yaml
+
+# Check status
+kubectl get pods -n aks-bpa
+kubectl get ingress -n aks-bpa
+```
+
+**Or use Kustomize:**
+
+```bash
+kubectl apply -k k8s/
+```
+
+#### Step 3: Build Custom Images (Optional)
+
+Build and push your own container images:
+
+```bash
+# Build images
+docker build -t myregistry.azurecr.io/aks-bpa-backend:latest ./backend
+docker build -t myregistry.azurecr.io/aks-bpa-frontend:latest ./frontend
+
+# Push to registry
+docker push myregistry.azurecr.io/aks-bpa-backend:latest
+docker push myregistry.azurecr.io/aks-bpa-frontend:latest
+
+# Update image references in k8s/kustomization.yaml or k8s/*.yaml files
+```
+
+#### Using Workload Identity (Recommended for AKS)
+
+Instead of using a Service Principal secret, you can use Azure Workload Identity:
+
+1. Enable Workload Identity on your AKS cluster
+2. Create a managed identity with required permissions
+3. Create a federated credential for the Kubernetes service account
+4. Update the backend deployment to use the service account
+
+```yaml
+# Add to backend deployment spec
+serviceAccountName: aks-bpa-backend
+```
 
 ## 🔐 Azure Authentication
 
